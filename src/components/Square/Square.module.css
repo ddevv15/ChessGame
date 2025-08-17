@@ -1,0 +1,311 @@
+/* Square component styles */
+
+.square {
+  position: relative;
+  width: var(--square-size);
+  height: var(--square-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Base square colors */
+.lightSquare {
+  background-color: var(--color-light-square);
+}
+
+.darkSquare {
+  background-color: var(--color-dark-square);
+}
+
+/* Hover effects */
+.square:hover {
+  filter: brightness(1.1);
+}
+
+.square:active {
+  filter: brightness(0.95);
+}
+
+/* Selected square styling */
+.selected {
+  box-shadow: inset 0 0 0 3px var(--color-selected);
+  filter: brightness(1.2);
+  transition: all var(--transition-fast);
+}
+
+.selected:hover {
+  filter: brightness(1.25);
+}
+
+/* Valid move indicator for empty squares */
+.validMove {
+  position: relative;
+}
+
+.moveIndicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  height: 30%;
+  background-color: var(--color-valid-move);
+  border-radius: 50%;
+  opacity: 0.8;
+  pointer-events: none;
+  transition: all var(--transition-fast);
+  animation: moveIndicatorAppear 0.2s ease-out;
+}
+
+@keyframes moveIndicatorAppear {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+}
+
+/* Capture indicator for occupied squares that can be captured */
+.captureIndicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 3px solid var(--color-valid-move);
+  border-radius: var(--border-radius-sm);
+  opacity: 0.8;
+  pointer-events: none;
+  transition: all var(--transition-fast);
+  animation: captureIndicatorAppear 0.2s ease-out;
+}
+
+@keyframes captureIndicatorAppear {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+/* Check indicator for king in check */
+.inCheck {
+  box-shadow: inset 0 0 0 4px var(--color-check);
+  animation: checkPulse 1s ease-in-out infinite alternate;
+  position: relative;
+}
+
+.inCheck::after {
+  content: '⚠';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--color-check);
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 10;
+  animation: checkWarning 1s ease-in-out infinite alternate;
+}
+
+@keyframes checkPulse {
+  from {
+    filter: brightness(1);
+    box-shadow: inset 0 0 0 4px var(--color-check);
+  }
+  to {
+    filter: brightness(1.3);
+    box-shadow: inset 0 0 0 4px var(--color-check), 0 0 10px rgba(255, 107, 107, 0.5);
+  }
+}
+
+@keyframes checkWarning {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+/* Invalid move indicator */
+.invalidMove {
+  box-shadow: inset 0 0 0 3px var(--color-error);
+  animation: invalidMovePulse 0.5s ease-in-out;
+}
+
+@keyframes invalidMovePulse {
+  0% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+  50% {
+    filter: brightness(1.5);
+    transform: scale(1.05);
+  }
+  100% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+}
+
+/* Focus styles for accessibility */
+.square:focus {
+  outline: 2px solid var(--color-selected);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+/* Keyboard navigation focus indicator */
+.focused {
+  box-shadow: inset 0 0 0 2px var(--color-selected);
+  z-index: 2;
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .square {
+    cursor: default;
+    min-width: 44px; /* WCAG minimum touch target */
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .square:hover {
+    filter: none; /* Disable hover effects on touch */
+  }
+  
+  .square:active {
+    filter: brightness(0.9);
+    transform: scale(0.95);
+    transition: all 0.1s ease;
+  }
+  
+  .moveIndicator {
+    width: 40%;
+    height: 40%;
+  }
+  
+  .captureIndicator {
+    border-width: 3px;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .square {
+    cursor: default; /* Better for touch devices */
+  }
+  
+  .moveIndicator {
+    width: 35%;
+    height: 35%;
+  }
+  
+  .captureIndicator {
+    border-width: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .moveIndicator {
+    width: 40%;
+    height: 40%;
+  }
+  
+  .captureIndicator {
+    border-width: 2px;
+  }
+  
+  .square:focus {
+    outline-width: 1px;
+  }
+}
+
+/* Landscape mobile optimization */
+@media (max-width: 768px) and (orientation: landscape) {
+  .square {
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .lightSquare {
+    background-color: #ffffff;
+  }
+  
+  .darkSquare {
+    background-color: #000000;
+  }
+  
+  .selected {
+    box-shadow: inset 0 0 0 4px #ffff00;
+  }
+  
+  .moveIndicator {
+    background-color: #00ff00;
+    opacity: 1;
+  }
+  
+  .captureIndicator {
+    border-color: #00ff00;
+    border-width: 4px;
+    opacity: 1;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .square {
+    transition: none;
+  }
+  
+  .inCheck {
+    animation: none;
+    filter: brightness(1.3);
+    box-shadow: inset 0 0 0 4px var(--color-check);
+  }
+  
+  .inCheck::after {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
+  
+  .moveIndicator {
+    animation: none;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+  
+  .captureIndicator {
+    animation: none;
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}

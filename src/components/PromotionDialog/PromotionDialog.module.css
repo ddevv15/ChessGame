@@ -1,0 +1,223 @@
+/* PromotionDialog component styles */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: overlayFadeIn 0.2s ease-out;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.dialog {
+  background: var(--color-background);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-medium);
+  padding: var(--spacing-lg);
+  max-width: 400px;
+  width: 90%;
+  animation: dialogSlideIn 0.3s ease-out;
+}
+
+@keyframes dialogSlideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.title {
+  font-size: var(--font-size-large);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.subtitle {
+  font-size: var(--font-size-base);
+  color: var(--color-text-light);
+  margin: 0;
+}
+
+.pieceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.pieceButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: var(--color-background);
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 100px;
+}
+
+.pieceButton:hover {
+  border-color: var(--color-accent);
+  background-color: rgba(74, 144, 226, 0.1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-light);
+}
+
+.pieceButton:focus {
+  outline: none;
+  border-color: var(--color-selected);
+  box-shadow: 0 0 0 2px rgba(255, 255, 0, 0.3);
+}
+
+.pieceButton:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.pieceContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--spacing-sm);
+  font-size: 36px;
+}
+
+.pieceLabel {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  text-align: center;
+}
+
+.footer {
+  text-align: center;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--spacing-md);
+}
+
+.instruction {
+  font-size: var(--font-size-small);
+  color: var(--color-text-light);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.cancelButton {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-text-light);
+  font-size: var(--font-size-small);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.cancelButton:hover {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.cancelButton:focus {
+  outline: none;
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .dialog {
+    padding: var(--spacing-md);
+    width: 95%;
+  }
+  
+  .pieceGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-sm);
+  }
+  
+  .pieceButton {
+    padding: var(--spacing-sm);
+    min-height: 80px;
+  }
+  
+  .pieceContainer {
+    width: 36px;
+    height: 36px;
+    font-size: 28px;
+  }
+  
+  .title {
+    font-size: var(--font-size-base);
+  }
+  
+  .subtitle {
+    font-size: var(--font-size-small);
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .overlay {
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+  
+  .dialog {
+    border: 2px solid var(--color-text);
+  }
+  
+  .pieceButton {
+    border-width: 3px;
+  }
+  
+  .pieceButton:hover {
+    border-color: var(--color-text);
+    background-color: var(--color-background);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    animation: none;
+  }
+  
+  .dialog {
+    animation: none;
+  }
+  
+  .pieceButton {
+    transition: none;
+  }
+  
+  .pieceButton:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,230 @@
+/* ChessBoard component styles */
+
+.chessBoardContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-medium);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.boardWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chessBoard {
+  display: grid;
+  grid-template-columns: repeat(8, var(--square-size));
+  grid-template-rows: repeat(8, var(--square-size));
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  background-color: var(--color-light-square);
+  box-shadow: var(--shadow-light);
+}
+
+/* Flipped board state */
+.flipped {
+  transform: rotate(180deg);
+}
+
+.flipped > * {
+  transform: rotate(180deg);
+}
+
+/* Rank labels (1-8) on left and right sides */
+.rankLabels {
+  display: flex;
+  flex-direction: column;
+  height: var(--board-size);
+  justify-content: space-around;
+  align-items: center;
+  padding: 2px 0;
+}
+
+.rankLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--square-size);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-light);
+  line-height: 1;
+}
+
+/* File labels (a-h) on bottom */
+.fileLabels {
+  display: flex;
+  width: var(--board-size);
+  justify-content: space-around;
+  align-items: center;
+  padding: var(--spacing-xs) 2px;
+}
+
+.fileLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--square-size);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-light);
+  line-height: 1;
+}
+
+/* Error state */
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--board-size);
+  height: var(--board-size);
+  background-color: #ffebee;
+  border: 2px solid #f44336;
+  border-radius: var(--border-radius-md);
+  color: #c62828;
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .chessBoardContainer {
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm);
+  }
+  
+  .rankLabel,
+  .fileLabel {
+    font-size: calc(var(--font-size-small) * 0.9);
+  }
+  
+  .chessBoard {
+    border-width: 1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chessBoardContainer {
+    gap: 2px;
+    padding: var(--spacing-xs);
+  }
+  
+  .rankLabel,
+  .fileLabel {
+    font-size: calc(var(--font-size-small) * 0.8);
+  }
+  
+  /* Hide one set of rank labels on very small screens */
+  .chessBoardContainer > .rankLabels:last-child {
+    display: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .chessBoard {
+    border-color: #000000;
+    border-width: 3px;
+  }
+  
+  .rankLabel,
+  .fileLabel {
+    color: #000000;
+    font-weight: var(--font-weight-bold);
+  }
+  
+  .error {
+    background-color: #ffffff;
+    border-color: #000000;
+    color: #000000;
+  }
+}
+
+/* Print styles */
+@media print {
+  .chessBoardContainer {
+    box-shadow: none;
+    background-color: transparent;
+  }
+  
+  .chessBoard {
+    border-color: #000000;
+    box-shadow: none;
+  }
+  
+  .rankLabel,
+  .fileLabel {
+    color: #000000;
+  }
+}
+
+/* Focus management for accessibility */
+.chessBoard:focus-within {
+  outline: 2px solid var(--color-selected);
+  outline-offset: 2px;
+}
+
+/* Animation for board flipping */
+.chessBoard {
+  transition: transform var(--transition-medium);
+}
+
+.chessBoard > * {
+  transition: transform var(--transition-medium);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .chessBoard,
+  .chessBoard > * {
+    transition: none;
+  }
+  
+  .flipped {
+    transform: none;
+  }
+  
+  .flipped > * {
+    transform: none;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (orientation: landscape) and (max-height: 600px) {
+  .chessBoardContainer {
+    padding: var(--spacing-xs);
+  }
+  
+  .rankLabel,
+  .fileLabel {
+    font-size: calc(var(--font-size-small) * 0.85);
+  }
+}
+
+/* Dark mode support (if implemented later) */
+@media (prefers-color-scheme: dark) {
+  .chessBoardContainer {
+    background-color: #2d2d2d;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .chessBoard {
+    border-color: #555555;
+  }
+  
+  .rankLabel,
+  .fileLabel {
+    color: #cccccc;
+  }
+}

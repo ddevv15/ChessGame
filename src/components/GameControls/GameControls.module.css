@@ -1,0 +1,449 @@
+/* GameControls component styles */
+
+.gameControls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-width: 200px;
+}
+
+.statusSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.statusTitle {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 8px;
+}
+
+.statusText {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.statusPlaying {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.statusCheck {
+  background-color: #fff3e0;
+  color: #f57c00;
+  border: 1px solid #ffcc02;
+  animation: pulse 1.5s infinite;
+  position: relative;
+  font-weight: 600;
+}
+
+.statusCheck::before {
+  content: '⚠️';
+  margin-right: 8px;
+}
+
+.statusCheckmate {
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+  color: #c62828;
+  border: 2px solid #ef5350;
+  font-weight: 700;
+  position: relative;
+  animation: checkmateStatusPulse 2s ease-in-out infinite;
+  box-shadow: 0 4px 12px rgba(198, 40, 40, 0.2);
+  text-shadow: 0 1px 2px rgba(198, 40, 40, 0.1);
+}
+
+.statusCheckmate::before {
+  content: '🏁';
+  margin-right: 8px;
+  animation: iconBounce 1s ease-in-out infinite;
+}
+
+.statusStalemate {
+  background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+  color: #7b1fa2;
+  border: 2px solid #ce93d8;
+  font-weight: 600;
+  position: relative;
+  animation: stalemateStatusGlow 3s ease-in-out infinite;
+  box-shadow: 0 4px 12px rgba(123, 31, 162, 0.2);
+  text-shadow: 0 1px 2px rgba(123, 31, 162, 0.1);
+}
+
+.statusStalemate::before {
+  content: '🤝';
+  margin-right: 8px;
+  animation: iconSway 2s ease-in-out infinite;
+}
+
+/* Game state visual indicators */
+.gameStateVisual {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.checkIndicator,
+.checkmateIndicator,
+.stalemateIndicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.checkIndicator {
+  background-color: #fff3e0;
+  color: #f57c00;
+  border: 1px solid #ffcc02;
+  animation: checkFlash 1s infinite;
+}
+
+.checkmateIndicator {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef5350;
+  animation: checkmateGlow 2s ease-in-out infinite;
+  box-shadow: 0 2px 8px rgba(198, 40, 40, 0.2);
+}
+
+.stalemateIndicator {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+  border: 1px solid #ce93d8;
+  animation: stalemateShimmer 3s ease-in-out infinite;
+  box-shadow: 0 2px 8px rgba(123, 31, 162, 0.2);
+}
+
+@keyframes checkFlash {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255, 204, 2, 0);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 204, 2, 0.4);
+  }
+}
+
+.checkIcon,
+.checkmateIcon,
+.stalemateIcon {
+  font-size: 14px;
+}
+
+.checkText,
+.checkmateText,
+.stalemateText {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@keyframes checkmateGlow {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(198, 40, 40, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 4px 16px rgba(198, 40, 40, 0.4), 0 0 20px rgba(198, 40, 40, 0.3);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes stalemateShimmer {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(123, 31, 162, 0.2);
+    background-color: #f3e5f5;
+  }
+  50% {
+    box-shadow: 0 4px 12px rgba(123, 31, 162, 0.3);
+    background-color: #f8e5fa;
+  }
+}
+
+@keyframes checkmateStatusPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.2);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(198, 40, 40, 0.4);
+  }
+}
+
+@keyframes stalemateStatusGlow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(123, 31, 162, 0.2);
+  }
+  50% {
+    box-shadow: 0 6px 16px rgba(123, 31, 162, 0.3);
+  }
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes iconSway {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-3deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+.currentPlayer {
+  display: flex;
+  justify-content: center;
+}
+
+.playerIndicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.playerInCheck {
+  background-color: #fff3e0;
+  border-color: #ffcc02;
+  animation: playerCheckPulse 1.5s infinite;
+}
+
+@keyframes playerCheckPulse {
+  0% { 
+    background-color: #fff3e0;
+    transform: scale(1);
+  }
+  50% { 
+    background-color: #ffe0b3;
+    transform: scale(1.02);
+  }
+  100% { 
+    background-color: #fff3e0;
+    transform: scale(1);
+  }
+}
+
+.playerColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #333;
+}
+
+.playerColor.white {
+  background-color: #ffffff;
+  border-color: #333;
+}
+
+.playerColor.black {
+  background-color: #333333;
+  border-color: #666;
+}
+
+.playerText {
+  font-size: 12px;
+  font-weight: 500;
+  color: #555;
+}
+
+.controlsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.resetButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.resetButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+.resetButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.resetButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+}
+
+.resetIcon {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.gameOverMessage {
+  text-align: center;
+  padding: 12px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.gameOverMessage p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.gameOverSubtext {
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  color: #666 !important;
+  margin-top: 4px !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .gameControls {
+    padding: 12px;
+    gap: 16px;
+    min-width: 180px;
+  }
+  
+  .resetButton {
+    padding: 10px 16px;
+    font-size: 13px;
+    min-width: 100px;
+  }
+  
+  .statusText {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+  
+  .playerIndicator {
+    padding: 4px 10px;
+  }
+  
+  .playerText {
+    font-size: 11px;
+  }
+
+  .checkIndicator,
+  .checkmateIndicator,
+  .stalemateIndicator {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+
+  .checkIcon,
+  .checkmateIcon,
+  .stalemateIcon {
+    font-size: 12px;
+  }
+
+  .checkText,
+  .checkmateText,
+  .stalemateText {
+    font-size: 10px;
+  }
+}
+
+/* Reduced motion support for visual indicators */
+@media (prefers-reduced-motion: reduce) {
+  .statusCheck {
+    animation: none;
+  }
+  
+  .statusCheckmate {
+    animation: none;
+    transform: none;
+  }
+  
+  .statusStalemate {
+    animation: none;
+  }
+  
+  .statusCheckmate::before,
+  .statusStalemate::before {
+    animation: none;
+    transform: none;
+  }
+  
+  .checkIndicator {
+    animation: none;
+  }
+  
+  .checkmateIndicator {
+    animation: none;
+    transform: none;
+  }
+  
+  .stalemateIndicator {
+    animation: none;
+  }
+  
+  .playerInCheck {
+    animation: none;
+    background-color: #fff3e0;
+    transform: none;
+  }
+  
+  .inCheck::after {
+    animation: none;
+  }
+}

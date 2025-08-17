@@ -1,0 +1,53 @@
+/* CSS Variables for consistent theming */
+:root {
+  /* Colors */
+  --color-light-square: #f0d9b5;
+  --color-dark-square: #b58863;
+  --color-selected: #ffff00;
+  --color-valid-move: #90ee90;
+  --color-check: #ff6b6b;
+  --color-error: #ff4444;
+  --color-background: #fafafa;
+  --color-background-gradient: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+  --color-text: #2c2c2c;
+  --color-text-light: #666666;
+  --color-border: #e0e0e0;
+  --color-accent: #4a90e2;
+  --color-success: #28a745;
+  --color-warning: #ffc107;
+  
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  --font-size-base: 16px;
+  --font-size-small: 14px;
+  --font-size-large: 18px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* Board dimensions */
+  --board-size: min(80vw, 80vh, 600px);
+  --square-size: calc(var(--board-size) / 8);
+  
+  /* Animations */
+  --transition-fast: 0.15s ease;
+  --transition-medium: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* Shadows */
+  --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.15);
+  
+  /* Border radius */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+}

@@ -1,0 +1,157 @@
+/* MoveHistory component styles */
+
+.moveHistory {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 300px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8f9fa;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.moveList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  max-height: 400px;
+}
+
+.moveList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.moveList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.moveList::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.moveList::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  color: #666;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.movePair {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  margin-bottom: 2px;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+.movePair:hover {
+  background-color: #f5f5f5;
+}
+
+.moveNumber {
+  font-weight: 600;
+  color: #666;
+  font-size: 13px;
+  min-width: 24px;
+  margin-right: 8px;
+}
+
+.moves {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+}
+
+.move {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 40px;
+  text-align: center;
+}
+
+.move:hover {
+  background-color: #e3f2fd;
+}
+
+.whiteMove {
+  color: #333;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+}
+
+.blackMove {
+  color: #333;
+  background-color: #f0f0f0;
+  border: 1px solid #d0d0d0;
+}
+
+.currentMove {
+  background-color: #2196f3 !important;
+  color: white !important;
+  border-color: #1976d2 !important;
+  font-weight: 600;
+}
+
+.footer {
+  padding: 8px 16px;
+  border-top: 1px solid #e0e0e0;
+  background: #f8f9fa;
+  text-align: center;
+}
+
+.moveCount {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .moveHistory {
+    min-height: 200px;
+  }
+  
+  .moveList {
+    max-height: 250px;
+  }
+  
+  .movePair {
+    padding: 6px 8px;
+  }
+  
+  .moves {
+    gap: 8px;
+  }
+  
+  .move {
+    font-size: 12px;
+    min-width: 35px;
+  }
+}
