@@ -527,6 +527,62 @@ This file tracks all changes made during the implementation of the React Chess G
 
 ---
 
+### [2025-01-15] - Bug Fix: React Hooks Rule Violation in ChessPiece Component
+
+**User Prompt:** "the build fails lets fix this issue"
+
+**Changes Made:**
+
+- Fixed React Hooks rule violation in ChessPiece component where `useEffect` was called conditionally
+- The issue was caused by an early return statement (prop validation) that occurred before the `useEffect` hook
+- Moved all React hooks to the top of the component, before any conditional logic or early returns
+- Moved prop validation to after hooks to comply with Rules of Hooks
+- This ensures hooks are called in the same order on every render
+
+**Files Affected:**
+
+- Modified: `src/components/ChessPiece/ChessPiece.js` (lines 35-67: reordered hooks and validation logic)
+
+**Status:** Completed
+
+**Notes:** Build now succeeds with only minor ESLint warnings about unused variables. The React Hooks Rules of Hooks violation has been resolved. The component still maintains the same functionality but now follows React best practices for hook usage.
+
+🏗️ **BUILD STATUS: SUCCESS - Production build ready for deployment!**
+
+---
+
+### [2025-01-15] - Feature: GitHub Pages Deployment Setup
+
+**User Prompt:** "lets add a deploy script as well for now i wish to deploy it using gh-pages"
+
+**Changes Made:**
+
+- Added gh-pages package as dev dependency for easy GitHub Pages deployment
+- Updated package.json with homepage field for GitHub Pages URL configuration
+- Added deployment scripts: `predeploy` (builds app) and `deploy` (deploys to gh-pages)
+- Created comprehensive DEPLOYMENT.md guide with step-by-step instructions
+- Updated README.md with deployment section and feature overview
+- Added proper project description and feature list to README
+
+**Files Affected:**
+
+- Modified: `package.json` (added homepage field, deploy scripts, gh-pages dependency)
+- Created: `DEPLOYMENT.md` (complete deployment guide with troubleshooting)
+- Modified: `README.md` (added project description, features, and deployment section)
+
+**New Scripts Available:**
+
+- `npm run deploy` - Builds and deploys to GitHub Pages
+- `npm run predeploy` - Builds production version (runs automatically before deploy)
+
+**Status:** Completed
+
+**Notes:** The deployment setup is now ready. Users need to update the homepage URL in package.json with their actual GitHub username and repository name, then run `npm run deploy` to deploy to GitHub Pages. The build is optimized and ready for production deployment.
+
+🚀 **DEPLOYMENT READY: One command away from going live!**
+
+---
+
 ## Implementation Guidelines
 
 When implementing tasks, each entry should include:

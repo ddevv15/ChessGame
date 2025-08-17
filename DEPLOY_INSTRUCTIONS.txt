@@ -1,0 +1,48 @@
+🚀 QUICK DEPLOYMENT GUIDE
+========================
+
+Your React Chess Game is now ready for deployment to GitHub Pages!
+
+STEP 1: Update Homepage URL
+---------------------------
+Edit package.json and replace this line:
+  "homepage": "https://YOUR_USERNAME.github.io/chessgame",
+
+With your actual GitHub info:
+  "homepage": "https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME",
+
+Example:
+  "homepage": "https://johndoe.github.io/chessgame",
+
+STEP 2: Deploy
+--------------
+Run this command:
+  npm run deploy
+
+This will:
+- Build your optimized production app
+- Create a gh-pages branch 
+- Deploy your built app to GitHub Pages
+
+STEP 3: Enable GitHub Pages (First time only)
+----------------------------------------------
+1. Go to your GitHub repository
+2. Click Settings tab
+3. Scroll to Pages section (left sidebar) 
+4. Under Source: select "Deploy from a branch"
+5. Choose "gh-pages" branch and "/ (root)" folder
+6. Click Save
+
+STEP 4: Access Your Live Chess Game!
+------------------------------------
+Your app will be live at:
+https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME
+
+Example:
+https://johndoe.github.io/chessgame
+
+🎯 That's it! Your chess game is now live and ready to share!
+
+Note: It may take a few minutes for the deployment to go live.
+
+For detailed instructions and troubleshooting, see DEPLOYMENT.md

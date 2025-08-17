@@ -32,16 +32,7 @@ const ChessPiece = ({
 }) => {
   const [animationClass, setAnimationClass] = useState("");
 
-  // Validate props
-  if (!isValidPieceType(type) || !isValidPieceColor(color)) {
-    console.warn(`Invalid piece: ${color} ${type}`);
-    return null;
-  }
-
-  // Get the Unicode symbol for this piece
-  const pieceSymbol = UNICODE_PIECES[color][type];
-
-  // Handle animation effects
+  // Handle animation effects (must be before any early returns)
   useEffect(() => {
     if (isAnimating) {
       setAnimationClass(
@@ -65,6 +56,15 @@ const ChessPiece = ({
       setAnimationClass("");
     }
   }, [isAnimating, animationType, onAnimationEnd]);
+
+  // Validate props (after hooks to comply with Rules of Hooks)
+  if (!isValidPieceType(type) || !isValidPieceColor(color)) {
+    console.warn(`Invalid piece: ${color} ${type}`);
+    return null;
+  }
+
+  // Get the Unicode symbol for this piece
+  const pieceSymbol = UNICODE_PIECES[color][type];
 
   // Build CSS classes
   const pieceClasses = [
