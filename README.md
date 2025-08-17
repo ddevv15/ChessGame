@@ -1,103 +1,108 @@
 # ♟️ React Chess Game
 
-A fully-featured chess game built with React, featuring complete chess rules implementation, move validation, checkmate detection, and a beautiful responsive UI.
+A sleek, modern React-based chess game with polished UI, smooth animations, and complete rule support.
 
-## 🎮 Features
+---
 
-- **Complete Chess Rules**: All standard chess rules implemented including castling, en passant, and pawn promotion
-- **Move Validation**: Real-time move validation with visual feedback
-- **Check & Checkmate Detection**: Automatic detection of check, checkmate, and stalemate
-- **Move History**: Complete game history with algebraic notation
-- **Responsive Design**: Works perfectly on desktop and mobile devices
-- **Accessibility**: Full keyboard navigation and screen reader support
-- **Animations**: Smooth piece movement animations
-- **Game Controls**: Reset game, undo moves, and game status display
+## 🚀 Demo
 
-## 🚀 Quick Start
+👉 [Play Here](https://ddevv15.github.io/ChessGame)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---
 
-## Available Scripts
+## 🎯 Features
 
-In the project directory, you can run:
+- ♟️ Full chess rules (castling, en passant, promotion)
+- ✅ Real-time legal move validation
+- ⚔️ Check / Checkmate / Stalemate detection
+- 📜 Move history in algebraic notation
+- 📱 Responsive design (mobile & desktop)
+- ♿ Accessibility with keyboard navigation and ARIA labels
+- 🎞️ Smooth animations
+- 🔄 Reset & game status panel
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🛠️ Tech Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Frontend:** React (Create React App)
+- **Styling:** CSS Modules
+- **Testing:** Jest + React Testing Library
+- **Deployment:** GitHub Pages (`gh-pages`)
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## ⚙️ Setup
 
-### `npm run build`
+```bash
+# Install dependencies
+npm ci
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Run dev server
+npm start
+# App runs on http://localhost:3000
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🧪 Tests
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm test         # watch mode
+npm run test:ci  # CI-friendly mode (if configured)
+```
 
-### `npm run deploy`
+## 🏗️ Production Build
 
-🚀 **Deploy to GitHub Pages**
+```bash
+npm run build
+# Optimized static files in /build
+```
 
-Builds the app and deploys it to GitHub Pages. See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions.
+## 🌐 Deploy to GitHub Pages
 
-### `npm run eject`
+This project is deployed with the gh-pages package.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Add homepage to package.json
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```json
+{
+  "homepage": "https://ddevv15.github.io/ChessGame"
+}
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Add deploy scripts
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```json
+{
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  }
+}
+```
 
-## 🚀 Deployment
+### Deploy 🚀
 
-For detailed deployment instructions to GitHub Pages, see [DEPLOYMENT.md](./DEPLOYMENT.md).
+```bash
+npm run deploy
+```
 
-**Quick Deploy:**
+This builds the app and pushes the build/ folder to the gh-pages branch.
 
-1. Update the `homepage` field in `package.json` with your GitHub repository URL
-2. Run `npm run deploy`
-3. Enable GitHub Pages in your repository settings
+In GitHub → Settings → Pages → Source, select gh-pages branch.
 
-Your chess game will be live at: `https://YOUR_USERNAME.github.io/YOUR_REPOSITORY_NAME`
+## 🧩 Routing & Paths
 
-## Learn More
+GitHub Pages serves apps from /ChessGame/ (repo name).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Ensure "homepage" in package.json matches your Pages URL.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Alternatively, set "homepage": "." for relative paths to avoid 404 errors.
 
-### Code Splitting
+## 🩺 Troubleshooting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **White screen / 404 on CSS or JS** → Check "homepage" in package.json, then redeploy.
+- **Assets not found (/static/...)** → Happens if "homepage" is missing/incorrect.
 
-### Analyzing the Bundle Size
+## 📜 License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT License © 2025 Dev Shah
