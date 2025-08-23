@@ -1,0 +1,241 @@
+/* AIThinkingIndicator.module.css - Styling for AI thinking indicator */
+
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.content {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.iconContainer {
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.thinkingIcon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  display: block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.thinkingDots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3498db;
+  animation: bounce 1.4s ease-in-out infinite both;
+}
+
+.dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0s;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+.textContainer {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 12px 0;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.timerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.1rem;
+}
+
+.timerLabel {
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.timerValue {
+  color: #2c3e50;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  background: #f8f9fa;
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.1s ease-out;
+  position: relative;
+}
+
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Difficulty-based colors */
+.easy {
+  color: #27ae60;
+}
+
+.easy .progressFill {
+  background: linear-gradient(90deg, #27ae60, #2ecc71);
+}
+
+.medium {
+  color: #f39c12;
+}
+
+.medium .progressFill {
+  background: linear-gradient(90deg, #f39c12, #f1c40f);
+}
+
+.hard {
+  color: #e74c3c;
+}
+
+.hard .progressFill {
+  background: linear-gradient(90deg, #e74c3c, #c0392b);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .content {
+    padding: 30px 24px;
+    margin: 20px;
+  }
+  
+  .thinkingIcon {
+    font-size: 3rem;
+  }
+  
+  .title {
+    font-size: 1.3rem;
+  }
+  
+  .subtitle {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 24px 20px;
+  }
+  
+  .thinkingIcon {
+    font-size: 2.5rem;
+  }
+  
+  .title {
+    font-size: 1.2rem;
+  }
+  
+  .timer {
+    font-size: 1rem;
+  }
+}

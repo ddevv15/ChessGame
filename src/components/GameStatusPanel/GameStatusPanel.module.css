@@ -1,0 +1,278 @@
+/* GameStatusPanel.module.css - Styling for game status panel */
+
+.container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.header {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.content {
+  padding: 20px;
+}
+
+.section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-weight: 500;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  min-width: 80px;
+}
+
+.value {
+  font-weight: 600;
+  color: #2c3e50;
+  text-align: right;
+  flex: 1;
+}
+
+.difficulty {
+  color: #7f8c8d;
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+.playerTurn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.playerIndicator {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.playerIndicator.white {
+  background: #ecf0f1;
+  color: #2c3e50;
+  border: 2px solid #bdc3c7;
+}
+
+.playerIndicator.black {
+  background: #2c3e50;
+  color: white;
+  border: 2px solid #34495e;
+}
+
+.playerType {
+  color: #7f8c8d;
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+/* Game Status Colors */
+.playing {
+  color: #27ae60;
+}
+
+.check {
+  color: #f39c12;
+  font-weight: 700;
+}
+
+.checkmate {
+  color: #e74c3c;
+  font-weight: 700;
+}
+
+.stalemate {
+  color: #9b59b6;
+  font-weight: 700;
+}
+
+/* AI Thinking Indicator */
+.aiThinking {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-top: 16px;
+  border: 1px solid #e9ecef;
+}
+
+.aiIcon {
+  font-size: 1.5rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.aiText {
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* Game Over Section */
+.gameOver {
+  text-align: center;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-top: 16px;
+  border: 2px solid #e9ecef;
+}
+
+.gameOverIcon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  animation: bounceIn 0.6s ease-out;
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.gameOverText {
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    margin-bottom: 16px;
+  }
+  
+  .header {
+    padding: 14px 16px;
+  }
+  
+  .title {
+    font-size: 1rem;
+  }
+  
+  .content {
+    padding: 16px;
+  }
+  
+  .section {
+    padding: 10px 0;
+  }
+  
+  .label {
+    font-size: 0.85rem;
+    min-width: 70px;
+  }
+  
+  .value {
+    font-size: 0.9rem;
+  }
+  
+  .playerIndicator {
+    padding: 3px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .aiThinking {
+    padding: 14px;
+    margin-top: 14px;
+  }
+  
+  .gameOver {
+    padding: 16px;
+    margin-top: 14px;
+  }
+  
+  .gameOverIcon {
+    font-size: 2rem;
+  }
+  
+  .gameOverText {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 12px 14px;
+  }
+  
+  .content {
+    padding: 14px;
+  }
+  
+  .section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .label {
+    min-width: auto;
+  }
+  
+  .value {
+    text-align: left;
+    width: 100%;
+  }
+  
+  .playerTurn {
+    justify-content: flex-start;
+  }
+  
+  .aiThinking {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+}

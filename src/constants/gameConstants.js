@@ -105,6 +105,28 @@ export const GAME_ACTIONS = {
   START_PROMOTION: "START_PROMOTION",
   COMPLETE_PROMOTION: "COMPLETE_PROMOTION",
   CANCEL_PROMOTION: "CANCEL_PROMOTION",
+  SWITCH_GAME_MODE: "SWITCH_GAME_MODE",
+  SET_AI_THINKING: "SET_AI_THINKING",
+  SET_GEMINI_API_KEY: "SET_GEMINI_API_KEY",
+};
+
+// Game Modes
+export const GAME_MODES = {
+  PVP: "pvp",
+  AI: "ai",
+};
+
+// AI Difficulty Levels
+export const DIFFICULTY_LEVELS = {
+  EASY: "easy",
+  MEDIUM: "medium",
+  HARD: "hard",
+};
+
+// Player Types
+export const PLAYER_TYPES = {
+  HUMAN: "human",
+  AI: "ai",
 };
 
 /**
@@ -135,6 +157,11 @@ export const GAME_ACTIONS = {
  * @property {Move[]} moveHistory - Array of all moves made
  * @property {string} gameStatus - Current game status
  * @property {number[][]} validMoves - Array of valid move positions for selected piece
+ * @property {string} gameMode - Current game mode ('pvp' | 'ai')
+ * @property {string} aiDifficulty - AI difficulty level for AI mode
+ * @property {boolean} isAIThinking - Whether AI is currently calculating a move
+ * @property {string} humanPlayerColor - Color the human player is playing (for AI mode)
+ * @property {string} geminiApiKey - Google Gemini API key for AI functionality
  */
 
 // Piece creation helper functions
@@ -162,7 +189,7 @@ export const createMove = (
 });
 
 // Initial game state factory
-export const createInitialGameState = () => ({
+export const createInitialGameState = (gameMode = GAME_MODES.PVP) => ({
   board: INITIAL_BOARD_SETUP.map((row) =>
     row.map((piece) => (piece ? { ...piece } : null))
   ),
@@ -172,6 +199,12 @@ export const createInitialGameState = () => ({
   gameStatus: GAME_STATUS.PLAYING,
   validMoves: [],
   promotionState: null, // { fromRow, fromCol, toRow, toCol, playerColor }
+  gameMode: gameMode,
+  aiDifficulty:
+    gameMode === GAME_MODES.AI ? DIFFICULTY_LEVELS.MEDIUM : undefined,
+  isAIThinking: false,
+  humanPlayerColor: gameMode === GAME_MODES.AI ? PIECE_COLORS.WHITE : undefined,
+  geminiApiKey: undefined,
 });
 
 // Piece validation helpers

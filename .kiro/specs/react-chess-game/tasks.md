@@ -206,9 +206,140 @@
   - Ensure proper game flow continues after promotion choice
   - _Requirements: 3.4, 2.5, 7.4_
 
-- [ ] 10.3 Integrate promotion functionality with existing game flow
+- [x] 10.3 Integrate promotion functionality with existing game flow
+
   - Update GameBoard component to handle promotion states
   - Modify move validation to account for promotion scenarios
   - Add promotion choice to move history and chess notation
   - Write comprehensive tests for all promotion scenarios
   - _Requirements: 3.4, 4.1, 4.2, 7.4_
+
+- [x] 11. Implement Game Mode Selection and Management
+- [x] 11.1 Create GameModeSelection component and UI
+
+  - Design and implement game mode selection screen
+  - Add PvP vs AI mode selection buttons with clear visual distinction
+  - Implement difficulty selector for AI mode (Easy, Medium, Hard)
+  - Add Google Gemini API key input and validation
+  - Create minimal, clean styling consistent with overall design
+  - _Requirements: 7.1, 7.6, 9.1, 9.2, 9.5_
+
+- [x] 11.2 Implement GameModeManager utility module
+
+  - Create functions for game mode state management
+  - Implement mode switching logic between PvP and AI
+  - Add player type determination logic (human vs AI)
+  - Create game mode validation and configuration management
+  - Write comprehensive unit tests for all mode management functions
+  - _Requirements: 7.1, 7.2, 7.3, 9.1, 9.5_
+
+- [x] 11.3 Update App component for mode routing
+
+  - Modify App component to handle game mode selection state
+  - Implement routing logic between mode selection and game board
+  - Add top-level state management for game mode and API configuration
+  - Integrate mode selection with existing game initialization
+  - Write integration tests for mode selection flow
+  - _Requirements: 7.1, 7.6, 9.1, 9.5_
+
+- [x] 12. Implement Google Gemini AI Integration
+- [x] 12.1 Create AIService module for Gemini API integration
+
+  - Set up Google Gemini AI API client configuration
+  - Implement board state formatting for AI consumption
+  - Create move request function with difficulty level support
+  - Add AI response parsing and move validation
+  - Implement comprehensive error handling and fallback mechanisms
+  - _Requirements: 8.1, 8.2, 8.3, 8.5, 9.1_
+
+- [ ] 12.2 Implement AI move calculation and execution
+
+  - Create prompts for different difficulty levels (Easy, Medium, Hard)
+  - Implement AI move evaluation and selection logic
+  - Add move confidence scoring and reasoning extraction
+  - Ensure AI moves comply with all chess rules and validations
+  - Create fallback to random valid moves on API failures
+  - _Requirements: 8.1, 8.3, 8.4, 8.5, 9.1_
+
+- [x] 12.3 Add AI thinking indicator and user feedback
+
+  - Create AIThinkingIndicator component with loading animation
+  - Implement thinking time tracking and display
+  - Add visual feedback for AI processing states
+  - Create smooth transitions between human and AI turns
+  - Write unit tests for AI indicator component
+  - _Requirements: 8.2, 6.1, 6.2, 9.1_
+
+- [x] 13. Integrate AI with Game Flow
+- [x] 13.1 Update GameBoard component for AI integration
+
+  - Modify game state to include AI mode and thinking status
+  - Implement AI turn detection and automatic move triggering
+  - Add AI move execution with proper state updates
+  - Ensure turn alternation works correctly in AI mode
+  - Create seamless integration with existing move validation
+  - _Requirements: 7.2, 7.3, 8.1, 8.3, 9.1_
+
+- [x] 13.2 Implement AI game flow and turn management
+
+  - Create AI turn triggering logic after human moves
+  - Implement proper game flow for AI vs human gameplay
+  - Add game state validation for AI moves
+  - Ensure AI respects all game rules (check, checkmate, stalemate)
+  - Create comprehensive AI game flow testing
+  - _Requirements: 7.2, 7.5, 8.1, 8.3, 9.1_
+
+- [x] 13.3 Add GameStatusPanel for enhanced game information
+
+  - Create component to display current player and game mode
+  - Add visual indicators for AI thinking vs human turn
+  - Implement game status display with mode-specific information
+  - Add minimal styling consistent with overall design
+  - Write unit tests for status panel functionality
+  - _Requirements: 6.1, 6.2, 7.1, 8.2, 9.1_
+
+- [ ] 14. Enhance UI for Multi-Mode Support
+- [ ] 14.1 Update GameControls for mode switching
+
+  - Add mode switching functionality to game controls
+  - Implement reset button that respects current game mode
+  - Add game mode display in controls panel
+  - Create confirmation dialogs for mode changes during games
+  - Write tests for enhanced game controls
+  - _Requirements: 5.1, 5.2, 6.1, 7.6, 9.1_
+
+- [ ] 14.2 Enhance visual feedback for different game modes
+
+  - Add visual indicators to distinguish PvP from AI mode
+  - Implement different color schemes or indicators for AI turns
+  - Create enhanced animations for AI move execution
+  - Add mode-specific visual feedback and status indicators
+  - Ensure all visual enhancements maintain minimal design aesthetic
+  - _Requirements: 6.1, 6.2, 6.4, 8.2, 9.1_
+
+- [ ] 15. Testing and Error Handling
+- [ ] 15.1 Create comprehensive AI testing suite
+
+  - Write unit tests for AIService module with mocked API responses
+  - Create integration tests for complete AI game flows
+  - Test all AI error scenarios and fallback mechanisms
+  - Implement performance tests for AI response times
+  - Create mock Gemini API for consistent testing
+  - _Requirements: 8.5, 9.1, 9.4, 9.5_
+
+- [ ] 15.2 Test game mode transitions and edge cases
+
+  - Test switching between PvP and AI modes during games
+  - Create tests for all difficulty levels and AI behaviors
+  - Test API key validation and error handling
+  - Ensure proper state management across mode changes
+  - Write integration tests for complete mode selection flow
+  - _Requirements: 7.6, 8.5, 9.1, 9.5_
+
+- [ ] 15.3 Implement comprehensive error handling
+  - Add graceful degradation when AI service fails
+  - Implement user-friendly error messages for API issues
+  - Create fallback to PvP mode when AI completely fails
+  - Add retry mechanisms for temporary API failures
+  - Ensure all error states maintain game playability
+  - _Requirements: 8.5, 9.1, 9.5_

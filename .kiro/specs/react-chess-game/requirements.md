@@ -77,6 +77,31 @@ This feature involves creating a full-featured React.js chess game application w
 
 ### Requirement 7
 
+**User Story:** As a chess player, I want to choose between playing against another human or an AI opponent, so that I can enjoy different types of chess experiences.
+
+#### Acceptance Criteria
+
+1. WHEN the application loads THEN the system SHALL display a game mode selection screen with PvP and AI options
+2. WHEN I select PvP mode THEN the system SHALL allow two human players to take turns on the same device
+3. WHEN I select AI mode THEN the system SHALL allow me to play against a computer opponent
+4. WHEN playing against AI THEN the system SHALL make intelligent moves using Google Gemini AI
+5. WHEN in AI mode THEN the system SHALL provide difficulty selection (Easy, Medium, Hard)
+6. WHEN switching game modes THEN the system SHALL properly reset the game state
+
+### Requirement 8
+
+**User Story:** As a chess player, I want the AI opponent to make challenging and realistic moves, so that I can improve my chess skills.
+
+#### Acceptance Criteria
+
+1. WHEN AI makes a move THEN the system SHALL use Google Gemini API to analyze the current board position
+2. WHEN AI is thinking THEN the system SHALL display a loading indicator to show processing
+3. WHEN AI move is calculated THEN the system SHALL execute the move with the same validation as human moves
+4. WHEN on different difficulty levels THEN the AI SHALL make moves of appropriate strength
+5. WHEN API call fails THEN the system SHALL gracefully handle errors and provide fallback options
+
+### Requirement 9
+
 **User Story:** As a developer, I want the code to be modular and well-structured, so that the application can be easily maintained and extended.
 
 #### Acceptance Criteria

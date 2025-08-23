@@ -23,6 +23,40 @@
   margin: 0;
 }
 
+.App-mode-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.App-mode-badge,
+.App-difficulty-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.App-mode-badge {
+  background: var(--color-primary);
+  color: white;
+  border: 2px solid var(--color-primary-dark);
+}
+
+.App-difficulty-badge {
+  background: var(--color-secondary);
+  color: white;
+  border: 2px solid var(--color-secondary-dark);
+}
+
 .App-main {
   flex: 1;
   display: flex;
@@ -55,6 +89,17 @@
   
   .App-title {
     font-size: var(--font-size-base);
+  }
+  
+  .App-mode-info {
+    gap: 8px;
+    margin-top: 6px;
+  }
+  
+  .App-mode-badge,
+  .App-difficulty-badge {
+    padding: 4px 10px;
+    font-size: 0.75rem;
   }
   
   .App-main {
