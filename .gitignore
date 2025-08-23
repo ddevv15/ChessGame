@@ -19,6 +19,18 @@
 .env.test.local
 .env.production.local
 
+# API keys and secrets
+*.key
+*.pem
+secrets.json
+config/secrets.js
+src/config/secrets.js
+
+# Build artifacts that might contain embedded keys
+/build
+/dist
+/static
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

@@ -34,14 +34,51 @@ A sleek, modern React-based chess game with polished UI, smooth animations, and 
 
 ## ⚙️ Setup
 
+### 1. Clone and Install
+
 ```bash
+# Clone the repository
+git clone https://github.com/ddevv15/ChessGame.git
+cd ChessGame
+
 # Install dependencies
 npm ci
+```
 
-# Run dev server
+### 2. Environment Setup (IMPORTANT)
+
+```bash
+# Copy the example environment file
+cp .env.example .env.local
+
+# Edit .env.local and add your actual API keys
+# NEVER commit .env.local to git - it's automatically ignored
+```
+
+### 3. Get API Keys
+
+For AI functionality, you'll need a Google Gemini API key:
+
+1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Create a new API key
+3. Add it to your `.env.local` file:
+   ```
+   REACT_APP_GEMINI_API_KEY=your_actual_api_key_here
+   ```
+
+### 4. Run Development Server
+
+```bash
 npm start
 # App runs on http://localhost:3000
 ```
+
+## 🔒 Security Notes
+
+- **NEVER** commit API keys to git
+- Use `.env.local` for local development (automatically ignored by git)
+- The `.env` file contains only example values
+- Real API keys should only be in `.env.local` or deployment environment variables
 
 ## 🧪 Tests
 
