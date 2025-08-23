@@ -173,7 +173,7 @@
   - Test with real checkmate scenarios to ensure game ends properly
   - _Requirements: 3.5, 5.1, 5.2_
 
-- [ ] 9.2 Add visual feedback for game over states
+- [x] 9.2 Add visual feedback for game over states
 
   - Enhance checkmate/stalemate visual indicators
   - Add game over overlay or modal for clear end-game communication
@@ -189,7 +189,7 @@
   - Verify that all game over states prevent further moves
   - _Requirements: 7.4, 5.3_
 
-- [-] 10. Implement pawn promotion choice functionality
+- [x] 10. Implement pawn promotion choice functionality
 - [x] 10.1 Create pawn promotion UI component
 
   - Design and implement a promotion selection modal/dialog
@@ -219,8 +219,7 @@
 
   - Design and implement game mode selection screen
   - Add PvP vs AI mode selection buttons with clear visual distinction
-  - Implement difficulty selector for AI mode (Easy, Medium, Hard)
-  - Add Google Gemini API key input and validation
+  - Add player color selection for AI mode (play as white or black)
   - Create minimal, clean styling consistent with overall design
   - _Requirements: 7.1, 7.6, 9.1, 9.2, 9.5_
 
@@ -242,24 +241,33 @@
   - Write integration tests for mode selection flow
   - _Requirements: 7.1, 7.6, 9.1, 9.5_
 
-- [x] 12. Implement Google Gemini AI Integration
-- [x] 12.1 Create AIService module for Gemini API integration
+- [x] 12. Implement FEN Generation and Board State Management
+- [x] 12.1 Create FEN generation utilities
 
-  - Set up Google Gemini AI API client configuration
-  - Implement board state formatting for AI consumption
-  - Create move request function with difficulty level support
-  - Add AI response parsing and move validation
-  - Implement comprehensive error handling and fallback mechanisms
-  - _Requirements: 8.1, 8.2, 8.3, 8.5, 9.1_
+  - Implement board state to FEN string conversion
+  - Add castling rights tracking and FEN encoding
+  - Implement en passant target square tracking
+  - Add halfmove and fullmove clock management
+  - Write comprehensive tests for FEN generation accuracy
+  - _Requirements: 8.1, 8.4, 9.1_
 
-- [ ] 12.2 Implement AI move calculation and execution
+- [x] 12.2 Create SAN (Standard Algebraic Notation) parsing system
 
-  - Create prompts for different difficulty levels (Easy, Medium, Hard)
-  - Implement AI move evaluation and selection logic
-  - Add move confidence scoring and reasoning extraction
-  - Ensure AI moves comply with all chess rules and validations
-  - Create fallback to random valid moves on API failures
-  - _Requirements: 8.1, 8.3, 8.4, 8.5, 9.1_
+  - Implement SAN move string parsing to board coordinates
+  - Add support for all move types (normal, capture, castling, promotion)
+  - Implement move disambiguation for ambiguous SAN notation
+  - Add SAN validation against current board position
+  - Write comprehensive tests for SAN parsing accuracy
+  - _Requirements: 8.1, 8.4, 9.1_
+
+- [x] 12.3 Implement AI communication service
+
+  - Create AI service module for FEN-to-SAN communication
+  - Implement AI move request with FEN input
+  - Add SAN response parsing and validation
+  - Create error handling for invalid AI responses
+  - Implement fallback to random legal moves on AI failures
+  - _Requirements: 8.1, 8.5, 8.6, 9.1_
 
 - [x] 12.3 Add AI thinking indicator and user feedback
 
@@ -299,7 +307,7 @@
   - _Requirements: 6.1, 6.2, 7.1, 8.2, 9.1_
 
 - [ ] 14. Enhance UI for Multi-Mode Support
-- [ ] 14.1 Update GameControls for mode switching
+- [x] 14.1 Update GameControls for mode switching
 
   - Add mode switching functionality to game controls
   - Implement reset button that respects current game mode
@@ -320,26 +328,36 @@
 - [ ] 15. Testing and Error Handling
 - [ ] 15.1 Create comprehensive AI testing suite
 
-  - Write unit tests for AIService module with mocked API responses
+  - Write unit tests for FEN generation with various board states
+  - Create unit tests for SAN parsing with all move types
+  - Test AI service module with mocked AI responses
   - Create integration tests for complete AI game flows
   - Test all AI error scenarios and fallback mechanisms
-  - Implement performance tests for AI response times
-  - Create mock Gemini API for consistent testing
   - _Requirements: 8.5, 9.1, 9.4, 9.5_
 
 - [ ] 15.2 Test game mode transitions and edge cases
 
   - Test switching between PvP and AI modes during games
-  - Create tests for all difficulty levels and AI behaviors
-  - Test API key validation and error handling
+  - Create tests for AI move validation and error recovery
+  - Test FEN generation accuracy in complex board positions
   - Ensure proper state management across mode changes
   - Write integration tests for complete mode selection flow
   - _Requirements: 7.6, 8.5, 9.1, 9.5_
 
 - [ ] 15.3 Implement comprehensive error handling
+
   - Add graceful degradation when AI service fails
   - Implement user-friendly error messages for API issues
   - Create fallback to PvP mode when AI completely fails
   - Add retry mechanisms for temporary API failures
   - Ensure all error states maintain game playability
   - _Requirements: 8.5, 9.1, 9.5_
+
+- [ ] 16. Fix AI Mode Integration Issue
+- [x] 16.1 Debug and fix AI mode not working properly
+  - Investigate why Player vs AI mode behaves like Player vs Player
+  - Ensure AI moves are triggered automatically after human moves
+  - Verify API key is properly passed to AI service
+  - Test AI move generation and execution in actual gameplay
+  - Fix any integration issues between GameBoard and AI service
+  - _Requirements: 8.1, 8.3, 8.5, 9.1_

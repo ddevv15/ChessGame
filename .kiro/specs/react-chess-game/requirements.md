@@ -94,11 +94,12 @@ This feature involves creating a full-featured React.js chess game application w
 
 #### Acceptance Criteria
 
-1. WHEN AI makes a move THEN the system SHALL use Google Gemini API to analyze the current board position
+1. WHEN AI makes a move THEN the system SHALL send the current board position in FEN format to the AI system
 2. WHEN AI is thinking THEN the system SHALL display a loading indicator to show processing
-3. WHEN AI move is calculated THEN the system SHALL execute the move with the same validation as human moves
-4. WHEN on different difficulty levels THEN the AI SHALL make moves of appropriate strength
-5. WHEN API call fails THEN the system SHALL gracefully handle errors and provide fallback options
+3. WHEN AI responds THEN the system SHALL receive a move in SAN (Standard Algebraic Notation) format only
+4. WHEN AI move is received THEN the system SHALL parse and validate the SAN move before execution
+5. WHEN AI provides invalid move THEN the system SHALL request a new move or use fallback logic
+6. WHEN API call fails THEN the system SHALL gracefully handle errors and provide fallback options
 
 ### Requirement 9
 

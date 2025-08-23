@@ -295,6 +295,14 @@
   align-items: center;
 }
 
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  align-items: center;
+}
+
 .resetButton {
   display: flex;
   align-items: center;
@@ -331,6 +339,45 @@
 
 .resetIcon {
   font-size: 16px;
+  font-weight: bold;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.backButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #5a6268 0%, #3d4449 100%);
+}
+
+.backButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.backButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.3);
+}
+
+.backIcon {
+  font-size: 14px;
   font-weight: bold;
 }
 
@@ -403,6 +450,315 @@
   }
 }
 
+/* Mode Section Styles */
+.modeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.modeTitle {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 6px;
+}
+
+.modeDisplay {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.modeText {
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+}
+
+.modeIndicator {
+  font-size: 16px;
+}
+
+/* Mode Switch Section */
+.modeSwitchSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.modeSwitchTitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 6px;
+}
+
+.modeSwitchButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.aiModeGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-left: 8px;
+}
+
+.modeButton {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: #ffffff;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.modeButton:hover:not(:disabled) {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+  transform: translateY(-1px);
+}
+
+.modeButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.modeButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.modeButtonActive {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border-color: #28a745;
+  font-weight: 600;
+}
+
+.modeButtonActive:hover {
+  background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+  transform: none;
+}
+
+.modeButtonIcon {
+  font-size: 14px;
+}
+
+/* Confirmation Dialog Styles */
+.confirmationOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.confirmationDialog {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-out;
+}
+
+.confirmationTitle {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+.confirmationMessage {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.confirmationDetails {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  color: #333;
+  text-align: center;
+  padding: 8px 12px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.confirmationButtons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirmButton {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.confirmButton:hover {
+  background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+  transform: translateY(-1px);
+}
+
+.confirmButton:active {
+  transform: translateY(0);
+}
+
+.cancelButton {
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelButton:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+}
+
+.cancelButton:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { 
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive design updates */
+@media (max-width: 768px) {
+  .gameControls {
+    padding: 12px;
+    gap: 16px;
+    min-width: 180px;
+  }
+  
+  .resetButton {
+    padding: 10px 16px;
+    font-size: 13px;
+    min-width: 100px;
+  }
+  
+  .statusText {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+  
+  .playerIndicator {
+    padding: 4px 10px;
+  }
+  
+  .playerText {
+    font-size: 11px;
+  }
+
+  .checkIndicator,
+  .checkmateIndicator,
+  .stalemateIndicator {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+
+  .checkIcon,
+  .checkmateIcon,
+  .stalemateIcon {
+    font-size: 12px;
+  }
+
+  .checkText,
+  .checkmateText,
+  .stalemateText {
+    font-size: 10px;
+  }
+
+  .modeSection,
+  .modeSwitchSection {
+    padding: 10px;
+  }
+
+  .modeButton {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .confirmationDialog {
+    padding: 20px;
+    margin: 16px;
+  }
+
+  .confirmationTitle {
+    font-size: 16px;
+  }
+
+  .confirmationMessage,
+  .confirmationDetails {
+    font-size: 13px;
+  }
+}
+
 /* Reduced motion support for visual indicators */
 @media (prefers-reduced-motion: reduce) {
   .statusCheck {
@@ -444,6 +800,14 @@
   }
   
   .inCheck::after {
+    animation: none;
+  }
+
+  .confirmationOverlay {
+    animation: none;
+  }
+
+  .confirmationDialog {
     animation: none;
   }
 }

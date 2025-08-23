@@ -51,9 +51,10 @@ The application will use React's built-in state management with `useState` and `
 
 1. Human player makes move (same as PvP steps 1-4)
 2. AI turn begins → Display thinking indicator
-3. Board state sent to Gemini API → AI calculates best move
-4. AI move returned → Validate and execute move
-5. Board updates → History updates → Switch back to human player
+3. Generate FEN from current board state → Send to AI system
+4. AI returns SAN move → Parse and validate move
+5. Execute validated AI move → Update board and history
+6. Switch back to human player
 
 #### Mode Selection:
 
@@ -255,12 +256,12 @@ The application will use React's built-in state management with `useState` and `
 
 #### 4. AIService Module
 
-- **Purpose**: Google Gemini AI integration
+- **Purpose**: AI chess opponent integration
 - **Functions**:
-  - `initializeGemini(apiKey)`: Initialize Gemini API client
-  - `requestAIMove(boardState, difficulty, moveHistory)`: Get AI move suggestion
-  - `formatBoardForAI(board)`: Convert board state to AI-readable format
-  - `parseAIResponse(response)`: Parse AI response to valid move
+  - `generateFEN(board, gameState)`: Convert board state to FEN notation
+  - `requestAIMove(fenString)`: Send FEN to AI and receive SAN move
+  - `parseSANMove(sanMove, board)`: Parse SAN notation to board coordinates
+  - `validateAIMove(move, board)`: Validate AI move against chess rules
   - `handleAPIError(error)`: Graceful error handling and fallbacks
 
 #### 5. GameModeManager Module
@@ -313,15 +314,33 @@ interface GameState {
 }
 ```
 
-### AIMove Interface
+### FENState Interface
 
 ```javascript
-interface AIMove {
+interface FENState {
+  fenString: string;
+  isValid: boolean;
+  boardPosition: string;
+  activeColor: string;
+  castlingRights: string;
+  enPassantTarget: string;
+  halfmoveClock: number;
+  fullmoveNumber: number;
+}
+```
+
+### SANMove Interface
+
+```javascript
+interface SANMove {
+  notation: string;
   from: [number, number];
   to: [number, number];
-  confidence: number;
-  reasoning?: string;
-  evaluationScore?: number;
+  piece: string;
+  isCapture: boolean;
+  isCheck: boolean;
+  isCheckmate: boolean;
+  promotion?: string;
 }
 ```
 
@@ -330,11 +349,67 @@ interface AIMove {
 ```javascript
 interface GameModeConfig {
   mode: "pvp" | "ai";
-  difficulty?: "easy" | "medium" | "hard";
   humanPlayerColor?: "white" | "black";
-  geminiApiKey?: string;
+  aiEndpoint?: string;
 }
 ```
+
+## AI Communication Protocol
+
+### FEN-to-SAN Architecture
+
+The AI integration follows a simple, stateless communication protocol:
+
+1. **Input**: Current board state converted to FEN (Forsyth-Edwards Notation)
+2. **Output**: AI move response in SAN (Standard Algebraic Notation)
+
+### FEN Generation Process
+
+```javascript
+// Example FEN string for starting position:
+"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+// Components:
+// 1. Board position: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+// 2. Active color: "w" (white to move) or "b" (black to move)
+// 3. Castling rights: "KQkq" (King/Queen side for white/black)
+// 4. En passant target: "-" (or square like "e3")
+// 5. Halfmove clock: "0" (moves since last pawn move or capture)
+// 6. Fullmove number: "1" (increments after black's move)
+```
+
+### SAN Response Format
+
+The AI will respond with standard algebraic notation moves:
+
+```javascript
+// Examples of expected SAN responses:
+"e4"; // Pawn to e4
+"Nf3"; // Knight to f3
+"Bb5+"; // Bishop to b5 with check
+"Qxd7#"; // Queen captures on d7 with checkmate
+"O-O"; // Kingside castling
+"O-O-O"; // Queenside castling
+"e8=Q"; // Pawn promotion to queen
+"Nbd2"; // Knight from b-file to d2 (disambiguation)
+```
+
+### Move Validation Pipeline
+
+1. **Receive SAN**: Parse the SAN string from AI response
+2. **Identify Piece**: Determine which piece is moving
+3. **Find Source**: Locate the piece's current position
+4. **Validate Move**: Ensure move is legal according to chess rules
+5. **Execute Move**: Apply the move to the board state
+6. **Handle Errors**: Request new move if invalid
+
+### Error Recovery Strategy
+
+- **Invalid SAN Format**: Request new move from AI
+- **Illegal Move**: Request new move with error context
+- **Ambiguous Move**: Request clarification or use best guess
+- **AI Timeout**: Fall back to random legal move
+- **Connection Error**: Pause game with retry option
 
 ## Error Handling
 

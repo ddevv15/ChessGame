@@ -245,7 +245,7 @@ describe("GameControls Component", () => {
     expect(resetButton).toHaveAttribute("type", "button");
     expect(resetButton).toHaveAttribute(
       "aria-label",
-      "Reset game to starting position"
+      "Reset game to starting position in Player vs Player mode"
     );
   });
 

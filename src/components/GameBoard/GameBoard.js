@@ -5,11 +5,13 @@ import GameControls from "../GameControls/GameControls.js";
 import MoveHistory from "../MoveHistory/MoveHistory.js";
 import PromotionDialog from "../PromotionDialog/PromotionDialog.js";
 import GameOverModal from "../GameOverModal/GameOverModal.js";
+import AIThinkingIndicator from "../AIThinkingIndicator/AIThinkingIndicator.js";
 import {
   createInitialGameState,
   GAME_ACTIONS,
   PIECE_COLORS,
   PIECE_TYPES,
+  GAME_MODES,
   getOpponentColor,
 } from "../../constants/gameConstants.js";
 import {
@@ -22,6 +24,7 @@ import {
 } from "../../utils/gameLogic.js";
 import { getPieceAt } from "../../utils/boardUtils.js";
 import { createMoveHistoryEntry } from "../../utils/chessNotation.js";
+import { getAIMove } from "../../utils/aiService.js";
 import styles from "./GameBoard.module.css";
 
 /**
@@ -239,7 +242,12 @@ const gameReducer = (state, action) => {
  * GameBoard Component
  * Main game controller that manages game state and coordinates child components
  */
-const GameBoard = () => {
+const GameBoard = ({
+  gameMode,
+  aiDifficulty,
+  onBackToModeSelection,
+  onModeChange,
+}) => {
   // Initialize game state with useReducer
   const [gameState, dispatch] = useReducer(
     gameReducer,
@@ -256,6 +264,10 @@ const GameBoard = () => {
 
   // State for keyboard navigation
   const [focusedSquare, setFocusedSquare] = useState([0, 0]);
+
+  // AI-related state
+  const [isAIThinking, setIsAIThinking] = useState(false);
+  const [aiThinkingStartTime, setAiThinkingStartTime] = useState(null);
 
   // Handle square clicks from the chess board
   const handleSquareClick = useCallback(
@@ -537,6 +549,76 @@ const GameBoard = () => {
     }
   }, [handleKeyDown]);
 
+  // AI move logic - trigger AI moves in AI mode
+  useEffect(() => {
+    const shouldTriggerAI =
+      gameMode === GAME_MODES.AI &&
+      gameState.gameStatus === "playing" &&
+      gameState.currentPlayer === PIECE_COLORS.BLACK && // AI plays as black
+      !isAIThinking &&
+      !gameState.promotionState; // Don't trigger AI during promotion
+
+    if (shouldTriggerAI) {
+      const makeAIMove = async () => {
+        setIsAIThinking(true);
+        setAiThinkingStartTime(Date.now());
+
+        try {
+          // Get API key from environment
+          const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
+
+          if (!apiKey) {
+            console.warn("No Gemini API key found, using fallback move");
+          }
+
+          // Request AI move
+          const aiMoveResult = await getAIMove(
+            gameState,
+            PIECE_COLORS.BLACK,
+            aiDifficulty || "medium",
+            apiKey
+          );
+
+          if (aiMoveResult.isValid && aiMoveResult.moveDetails) {
+            const { from, to } = aiMoveResult.moveDetails;
+
+            // Execute AI move
+            dispatch({
+              type: GAME_ACTIONS.MAKE_MOVE,
+              payload: {
+                fromRow: from[0],
+                fromCol: from[1],
+                toRow: to[0],
+                toCol: to[1],
+              },
+            });
+          } else {
+            console.error("AI move failed:", aiMoveResult.error);
+          }
+        } catch (error) {
+          console.error("Error getting AI move:", error);
+        } finally {
+          setIsAIThinking(false);
+          setAiThinkingStartTime(null);
+        }
+      };
+
+      // Add a small delay to make AI thinking visible
+      const delay = Math.max(500, Math.random() * 1500); // 0.5-2 seconds
+      const timeoutId = setTimeout(makeAIMove, delay);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [
+    gameState.currentPlayer,
+    gameState.gameStatus,
+    gameMode,
+    aiDifficulty,
+    isAIThinking,
+    gameState.promotionState,
+    gameState,
+  ]);
+
   // Handle promotion piece selection
   const handlePromotionSelect = useCallback((pieceType) => {
     dispatch({
@@ -587,7 +669,11 @@ const GameBoard = () => {
         <GameControls
           gameStatus={gameState.gameStatus}
           currentPlayer={gameState.currentPlayer}
+          gameMode={gameMode}
+          aiDifficulty={aiDifficulty}
           onReset={handleReset}
+          onBackToModeSelection={onBackToModeSelection}
+          onModeChange={onModeChange}
         />
 
         <MoveHistory
@@ -603,6 +689,15 @@ const GameBoard = () => {
         onPromotionSelect={handlePromotionSelect}
         onCancel={handlePromotionCancel}
       />
+
+      {/* AI Thinking Indicator */}
+      {gameMode === GAME_MODES.AI && (
+        <AIThinkingIndicator
+          isVisible={isAIThinking}
+          thinkingStartTime={aiThinkingStartTime}
+          difficulty={aiDifficulty}
+        />
+      )}
 
       {/* Game Over Modal */}
       <GameOverModal

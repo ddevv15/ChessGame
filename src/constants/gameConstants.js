@@ -204,7 +204,7 @@ export const createInitialGameState = (gameMode = GAME_MODES.PVP) => ({
     gameMode === GAME_MODES.AI ? DIFFICULTY_LEVELS.MEDIUM : undefined,
   isAIThinking: false,
   humanPlayerColor: gameMode === GAME_MODES.AI ? PIECE_COLORS.WHITE : undefined,
-  geminiApiKey: undefined,
+  geminiApiKey: process.env.REACT_APP_GEMINI_API_KEY || undefined,
 });
 
 // Piece validation helpers

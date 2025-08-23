@@ -35,6 +35,7 @@ function App() {
         gameMode={gameMode}
         aiDifficulty={aiDifficulty}
         onBackToModeSelection={handleBackToModeSelection}
+        onModeChange={handleModeSelect}
       />
     );
   };
