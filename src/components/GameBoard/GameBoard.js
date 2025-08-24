@@ -276,6 +276,13 @@ const GameBoard = ({
   const [aiRetryCount, setAiRetryCount] = useState(0);
   const [isRecoveringFromError, setIsRecoveringFromError] = useState(false);
 
+  // Debug state tracking for AI issues
+  const [aiDebugInfo, setAiDebugInfo] = useState({
+    lastMoveTime: null,
+    consecutiveFailures: 0,
+    totalMoves: 0,
+  });
+
   // Handle square clicks from the chess board
   const handleSquareClick = useCallback(
     (row, col) => {
@@ -422,6 +429,13 @@ const GameBoard = ({
     setIsRecoveringFromError(false);
     setIsAIThinking(false);
     setAiThinkingStartTime(null);
+
+    // Clear debug info
+    setAiDebugInfo({
+      lastMoveTime: null,
+      consecutiveFailures: 0,
+      totalMoves: 0,
+    });
 
     dispatch({ type: GAME_ACTIONS.RESET_GAME });
   }, []);
@@ -624,12 +638,19 @@ const GameBoard = ({
       gameState.gameStatus === "playing" &&
       gameState.currentPlayer === PIECE_COLORS.BLACK && // AI plays as black
       !isAIThinking &&
-      !gameState.promotionState && // Don't trigger AI during promotion
-      !currentError && // Don't trigger AI while error modal is shown
-      !isRecoveringFromError; // Don't trigger during error recovery
+      !gameState.promotionState; // Don't trigger AI during promotion
 
     if (shouldTriggerAI) {
+      // Create an abort controller to handle cleanup
+      const abortController = new AbortController();
+      let isRequestActive = true;
+
       const makeAIMove = async () => {
+        // Double-check conditions before starting (race condition protection)
+        if (!isRequestActive || abortController.signal.aborted) {
+          return;
+        }
+
         setIsAIThinking(true);
         setAiThinkingStartTime(Date.now());
 
@@ -647,14 +668,27 @@ const GameBoard = ({
               maxRetries: Math.max(0, 3 - aiRetryCount), // Reduce retries after failures
               enableRetry: aiRetryCount < 3,
               onError: handleAIError,
+              signal: abortController.signal, // Pass abort signal
             }
           );
+
+          // Check if request was aborted
+          if (abortController.signal.aborted || !isRequestActive) {
+            return;
+          }
 
           if (aiMoveResult.isValid && aiMoveResult.moveDetails) {
             const { from, to } = aiMoveResult.moveDetails;
 
             // Reset retry count on successful move
             setAiRetryCount(0);
+
+            // Update debug info
+            setAiDebugInfo((prev) => ({
+              lastMoveTime: Date.now(),
+              consecutiveFailures: 0,
+              totalMoves: prev.totalMoves + 1,
+            }));
 
             // Execute AI move
             dispatch({
@@ -677,57 +711,146 @@ const GameBoard = ({
               });
             }
           } else {
-            // Handle AI move failure
+            // Handle AI move failure - only show error for critical issues
             console.error("AI move failed:", aiMoveResult.error);
 
-            if (aiMoveResult.userMessage) {
-              handleAIError(aiMoveResult);
+            if (aiMoveResult.severity === "critical" || aiRetryCount >= 2) {
+              if (aiMoveResult.userMessage) {
+                handleAIError(aiMoveResult);
+              }
+            } else {
+              // For non-critical errors, just increment retry count and try again
+              setAiRetryCount((prev) => prev + 1);
+              setAiDebugInfo((prev) => ({
+                ...prev,
+                consecutiveFailures: prev.consecutiveFailures + 1,
+              }));
+              console.warn("AI move failed, will retry:", aiMoveResult.error);
             }
           }
         } catch (error) {
-          console.error("Critical error in AI move:", error);
+          // Only handle error if request wasn't aborted
+          if (!abortController.signal.aborted && isRequestActive) {
+            console.error("Critical error in AI move:", error);
 
-          // Handle critical errors
-          const criticalError = {
-            title: "Critical AI Error",
-            message:
-              "A critical error occurred with the AI service. Would you like to switch to Player vs Player mode?",
-            action: "Switch to PvP",
-            canRetry: false,
-            canContinue: true,
-            severity: "critical",
-            originalError: error.message,
-            timestamp: Date.now(),
-          };
+            // Handle critical errors
+            const criticalError = {
+              title: "Critical AI Error",
+              message:
+                "A critical error occurred with the AI service. Would you like to switch to Player vs Player mode?",
+              action: "Switch to PvP",
+              canRetry: false,
+              canContinue: true,
+              severity: "critical",
+              originalError: error.message,
+              timestamp: Date.now(),
+            };
 
-          handleAIError({ userMessage: criticalError });
+            handleAIError({ userMessage: criticalError });
+          }
         } finally {
-          setIsAIThinking(false);
-          setAiThinkingStartTime(null);
+          // Only update state if request wasn't aborted
+          if (!abortController.signal.aborted && isRequestActive) {
+            setIsAIThinking(false);
+            setAiThinkingStartTime(null);
+          }
         }
       };
 
-      // Add a small delay to make AI thinking visible, with longer delay after errors
-      const baseDelay = isRecoveringFromError ? 2000 : 500;
-      const randomDelay = Math.random() * (isRecoveringFromError ? 1000 : 1500);
-      const delay = Math.max(baseDelay, baseDelay + randomDelay);
+      // Add a small delay to make AI thinking visible
+      const baseDelay = 500;
+      const randomDelay = Math.random() * 1000; // 0-1 second random delay
+      const delay = baseDelay + randomDelay;
 
       const timeoutId = setTimeout(makeAIMove, delay);
 
-      return () => clearTimeout(timeoutId);
+      // Cleanup function
+      return () => {
+        isRequestActive = false;
+        abortController.abort();
+        clearTimeout(timeoutId);
+      };
     }
   }, [
     gameState.currentPlayer,
     gameState.gameStatus,
+    gameState.promotionState,
     gameMode,
     aiDifficulty,
     isAIThinking,
-    gameState.promotionState,
-    gameState,
-    currentError,
-    isRecoveringFromError,
     aiRetryCount,
     handleAIError,
+  ]);
+
+  // Error recovery mechanism - clear error states after a timeout to prevent AI from getting stuck
+  useEffect(() => {
+    if (currentError && gameMode === GAME_MODES.AI) {
+      const recoveryTimeout = setTimeout(() => {
+        // Auto-dismiss non-critical errors after 10 seconds to prevent AI from getting stuck
+        if (currentError.severity !== "critical") {
+          console.log("Auto-recovering from AI error:", currentError.title);
+          setCurrentError(null);
+          setIsRecoveringFromError(false);
+        }
+      }, 10000); // 10 second timeout
+
+      return () => clearTimeout(recoveryTimeout);
+    }
+  }, [currentError, gameMode]);
+
+  // AI turn timeout protection - prevent AI from getting stuck indefinitely
+  useEffect(() => {
+    if (
+      gameMode === GAME_MODES.AI &&
+      gameState.currentPlayer === PIECE_COLORS.BLACK &&
+      isAIThinking &&
+      aiThinkingStartTime
+    ) {
+      const maxThinkingTime = 30000; // 30 seconds maximum
+      const timeoutId = setTimeout(() => {
+        console.warn("AI thinking timeout - forcing fallback move");
+        setIsAIThinking(false);
+        setAiThinkingStartTime(null);
+
+        // Generate a simple fallback move
+        try {
+          const { generateFallbackMove } = require("../utils/aiService.js");
+          const fallbackMove = generateFallbackMove(
+            gameState.board,
+            PIECE_COLORS.BLACK,
+            aiDifficulty || "medium"
+          );
+
+          if (fallbackMove.isValid && fallbackMove.moveDetails) {
+            const { from, to } = fallbackMove.moveDetails;
+            dispatch({
+              type: GAME_ACTIONS.MAKE_MOVE,
+              payload: {
+                fromRow: from[0],
+                fromCol: from[1],
+                toRow: to[0],
+                toCol: to[1],
+              },
+            });
+            console.log(
+              "Timeout fallback move executed:",
+              fallbackMove.sanMove
+            );
+          }
+        } catch (error) {
+          console.error("Failed to generate timeout fallback move:", error);
+        }
+      }, maxThinkingTime);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [
+    gameMode,
+    gameState.currentPlayer,
+    isAIThinking,
+    aiThinkingStartTime,
+    gameState.board,
+    aiDifficulty,
   ]);
 
   // Handle promotion piece selection
@@ -837,6 +960,41 @@ const GameBoard = ({
         onDismiss={handleErrorDismiss}
         onClose={handleErrorDismiss}
       />
+
+      {/* AI Debug Panel (Development Only) */}
+      {process.env.NODE_ENV === "development" && gameMode === GAME_MODES.AI && (
+        <div
+          style={{
+            position: "fixed",
+            top: "10px",
+            right: "10px",
+            background: "rgba(0,0,0,0.8)",
+            color: "white",
+            padding: "10px",
+            borderRadius: "5px",
+            fontSize: "12px",
+            zIndex: 1000,
+            maxWidth: "200px",
+          }}
+        >
+          <div>
+            <strong>AI Debug Info:</strong>
+          </div>
+          <div>Current Player: {gameState.currentPlayer}</div>
+          <div>AI Thinking: {isAIThinking ? "Yes" : "No"}</div>
+          <div>Retry Count: {aiRetryCount}</div>
+          <div>Total Moves: {aiDebugInfo.totalMoves}</div>
+          <div>Consecutive Failures: {aiDebugInfo.consecutiveFailures}</div>
+          <div>Has Error: {currentError ? "Yes" : "No"}</div>
+          <div>Recovering: {isRecoveringFromError ? "Yes" : "No"}</div>
+          {aiThinkingStartTime && (
+            <div>
+              Thinking Time:{" "}
+              {Math.round((Date.now() - aiThinkingStartTime) / 1000)}s
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

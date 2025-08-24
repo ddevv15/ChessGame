@@ -400,7 +400,12 @@ export const getAIMove = async (
   apiKey,
   options = {}
 ) => {
-  const { maxRetries = 3, enableRetry = true, onError = null } = options;
+  const {
+    maxRetries = 3,
+    enableRetry = true,
+    onError = null,
+    signal = null,
+  } = options;
 
   // Check AI service health first
   const healthCheck = checkAIServiceHealth(apiKey);
@@ -461,6 +466,11 @@ export const getAIMove = async (
       // Request move from AI with timeout
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
+      // If external abort signal is provided, listen to it
+      if (signal) {
+        signal.addEventListener("abort", () => controller.abort());
+      }
 
       try {
         const aiResponse = await requestAIMove(

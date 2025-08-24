@@ -30,6 +30,7 @@
   overflow: hidden;
   background-color: var(--color-light-square);
   box-shadow: var(--shadow-light);
+  gap: 0;
 }
 
 /* Flipped board state */
