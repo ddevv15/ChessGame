@@ -16,6 +16,7 @@ const GameControls = ({
   currentPlayer = PIECE_COLORS.WHITE,
   gameMode = GAME_MODES.PVP,
   aiDifficulty = DIFFICULTY_LEVELS.MEDIUM,
+  isAIThinking = false,
   onReset,
   onBackToModeSelection,
   onModeChange,
@@ -133,9 +134,15 @@ const GameControls = ({
 
   return (
     <div
-      className={styles.gameControls}
+      className={`${styles.gameControls} ${
+        gameMode === GAME_MODES.AI
+          ? styles.aiModeControls
+          : styles.pvpModeControls
+      } ${isAIThinking ? styles.aiThinking : ""}`}
       role="region"
       aria-label="Game controls and status"
+      data-game-mode={gameMode}
+      data-ai-thinking={isAIThinking}
     >
       <div className={styles.statusSection}>
         <h3 className={styles.statusTitle} id="game-status-title">
@@ -205,11 +212,28 @@ const GameControls = ({
       {/* Game Mode Display */}
       <div className={styles.modeSection}>
         <h4 className={styles.modeTitle}>Game Mode</h4>
-        <div className={styles.modeDisplay}>
+        <div
+          className={`${styles.modeDisplay} ${
+            gameMode === GAME_MODES.AI
+              ? styles.aiModeDisplay
+              : styles.pvpModeDisplay
+          }`}
+        >
           <span className={styles.modeText}>{getModeDisplayText()}</span>
-          <div className={styles.modeIndicator}>
+          <div
+            className={`${styles.modeIndicator} ${
+              isAIThinking ? styles.thinkingIndicator : ""
+            }`}
+          >
             {gameMode === GAME_MODES.AI ? "🤖" : "👥"}
           </div>
+          {gameMode === GAME_MODES.AI && isAIThinking && (
+            <div className={styles.thinkingDots}>
+              <span className={styles.dot}></span>
+              <span className={styles.dot}></span>
+              <span className={styles.dot}></span>
+            </div>
+          )}
         </div>
       </div>
 

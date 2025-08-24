@@ -6,6 +6,7 @@ import MoveHistory from "../MoveHistory/MoveHistory.js";
 import PromotionDialog from "../PromotionDialog/PromotionDialog.js";
 import GameOverModal from "../GameOverModal/GameOverModal.js";
 import AIThinkingIndicator from "../AIThinkingIndicator/AIThinkingIndicator.js";
+import ErrorModal from "../ErrorModal/ErrorModal.js";
 import {
   createInitialGameState,
   GAME_ACTIONS,
@@ -269,6 +270,12 @@ const GameBoard = ({
   const [isAIThinking, setIsAIThinking] = useState(false);
   const [aiThinkingStartTime, setAiThinkingStartTime] = useState(null);
 
+  // Error handling state
+  const [currentError, setCurrentError] = useState(null);
+  const [errorHistory, setErrorHistory] = useState([]);
+  const [aiRetryCount, setAiRetryCount] = useState(0);
+  const [isRecoveringFromError, setIsRecoveringFromError] = useState(false);
+
   // Handle square clicks from the chess board
   const handleSquareClick = useCallback(
     (row, col) => {
@@ -407,6 +414,14 @@ const GameBoard = ({
     setMovingPiece(null);
     setInvalidMoveAttempt(null);
     setFocusedSquare([0, 0]);
+
+    // Clear error state
+    setCurrentError(null);
+    setErrorHistory([]);
+    setAiRetryCount(0);
+    setIsRecoveringFromError(false);
+    setIsAIThinking(false);
+    setAiThinkingStartTime(null);
 
     dispatch({ type: GAME_ACTIONS.RESET_GAME });
   }, []);
@@ -549,14 +564,69 @@ const GameBoard = ({
     }
   }, [handleKeyDown]);
 
-  // AI move logic - trigger AI moves in AI mode
+  // Error handling callbacks
+  const handleAIError = useCallback(
+    (errorResult) => {
+      console.error("AI Error:", errorResult);
+
+      // Add to error history
+      setErrorHistory((prev) => [
+        ...prev,
+        {
+          ...errorResult,
+          timestamp: Date.now(),
+          gameState: {
+            currentPlayer: gameState.currentPlayer,
+            moveCount: gameState.moveHistory.length,
+          },
+        },
+      ]);
+
+      // Show error modal for critical errors or repeated failures
+      if (errorResult.severity === "critical" || aiRetryCount >= 2) {
+        setCurrentError(errorResult.userMessage);
+      }
+    },
+    [gameState.currentPlayer, gameState.moveHistory.length, aiRetryCount]
+  );
+
+  const handleErrorRetry = useCallback(() => {
+    setCurrentError(null);
+    setIsRecoveringFromError(true);
+    setAiRetryCount((prev) => prev + 1);
+
+    // Trigger AI move retry
+    setTimeout(() => {
+      setIsRecoveringFromError(false);
+    }, 1000);
+  }, []);
+
+  const handleSwitchToPvP = useCallback(() => {
+    setCurrentError(null);
+    setAiRetryCount(0);
+    setIsRecoveringFromError(false);
+
+    // Switch to PvP mode
+    if (onModeChange) {
+      onModeChange(GAME_MODES.PVP);
+    }
+  }, [onModeChange]);
+
+  const handleErrorDismiss = useCallback(() => {
+    setCurrentError(null);
+    setIsRecoveringFromError(false);
+  }, []);
+
+  // AI move logic - trigger AI moves in AI mode with comprehensive error handling
   useEffect(() => {
     const shouldTriggerAI =
       gameMode === GAME_MODES.AI &&
       gameState.gameStatus === "playing" &&
       gameState.currentPlayer === PIECE_COLORS.BLACK && // AI plays as black
       !isAIThinking &&
-      !gameState.promotionState; // Don't trigger AI during promotion
+      !gameState.promotionState && // Don't trigger AI during promotion
+      !currentError && // Don't trigger AI while error modal is shown
+      !isRecoveringFromError; // Don't trigger during error recovery
 
     if (shouldTriggerAI) {
       const makeAIMove = async () => {
@@ -567,20 +637,24 @@ const GameBoard = ({
           // Get API key from environment
           const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
 
-          if (!apiKey) {
-            console.warn("No Gemini API key found, using fallback move");
-          }
-
-          // Request AI move
+          // Enhanced AI move request with error handling
           const aiMoveResult = await getAIMove(
             gameState,
             PIECE_COLORS.BLACK,
             aiDifficulty || "medium",
-            apiKey
+            apiKey,
+            {
+              maxRetries: Math.max(0, 3 - aiRetryCount), // Reduce retries after failures
+              enableRetry: aiRetryCount < 3,
+              onError: handleAIError,
+            }
           );
 
           if (aiMoveResult.isValid && aiMoveResult.moveDetails) {
             const { from, to } = aiMoveResult.moveDetails;
+
+            // Reset retry count on successful move
+            setAiRetryCount(0);
 
             // Execute AI move
             dispatch({
@@ -592,19 +666,52 @@ const GameBoard = ({
                 toCol: to[1],
               },
             });
+
+            // Log successful AI move for debugging
+            if (process.env.NODE_ENV === "development") {
+              console.log("AI move executed:", {
+                move: aiMoveResult.sanMove,
+                source: aiMoveResult.source,
+                confidence: aiMoveResult.confidence,
+                fallbackUsed: aiMoveResult.fallbackUsed,
+              });
+            }
           } else {
+            // Handle AI move failure
             console.error("AI move failed:", aiMoveResult.error);
+
+            if (aiMoveResult.userMessage) {
+              handleAIError(aiMoveResult);
+            }
           }
         } catch (error) {
-          console.error("Error getting AI move:", error);
+          console.error("Critical error in AI move:", error);
+
+          // Handle critical errors
+          const criticalError = {
+            title: "Critical AI Error",
+            message:
+              "A critical error occurred with the AI service. Would you like to switch to Player vs Player mode?",
+            action: "Switch to PvP",
+            canRetry: false,
+            canContinue: true,
+            severity: "critical",
+            originalError: error.message,
+            timestamp: Date.now(),
+          };
+
+          handleAIError({ userMessage: criticalError });
         } finally {
           setIsAIThinking(false);
           setAiThinkingStartTime(null);
         }
       };
 
-      // Add a small delay to make AI thinking visible
-      const delay = Math.max(500, Math.random() * 1500); // 0.5-2 seconds
+      // Add a small delay to make AI thinking visible, with longer delay after errors
+      const baseDelay = isRecoveringFromError ? 2000 : 500;
+      const randomDelay = Math.random() * (isRecoveringFromError ? 1000 : 1500);
+      const delay = Math.max(baseDelay, baseDelay + randomDelay);
+
       const timeoutId = setTimeout(makeAIMove, delay);
 
       return () => clearTimeout(timeoutId);
@@ -617,6 +724,10 @@ const GameBoard = ({
     isAIThinking,
     gameState.promotionState,
     gameState,
+    currentError,
+    isRecoveringFromError,
+    aiRetryCount,
+    handleAIError,
   ]);
 
   // Handle promotion piece selection
@@ -640,8 +751,11 @@ const GameBoard = ({
 
   return (
     <div
-      className={styles.gameBoard}
+      className={`${styles.gameBoard} ${
+        gameMode === GAME_MODES.AI ? styles.aiMode : styles.pvpMode
+      }`}
       data-testid="game-board"
+      data-game-mode={gameMode}
       tabIndex={0}
       role="application"
       aria-label="Chess game board with keyboard navigation. Use arrow keys to navigate, Enter or Space to select, Escape to clear selection."
@@ -660,6 +774,9 @@ const GameBoard = ({
           animatingPieces={animatingPieces}
           movingPiece={movingPiece}
           focusedSquare={focusedSquare}
+          gameMode={gameMode}
+          currentPlayer={gameState.currentPlayer}
+          isAIThinking={isAIThinking}
           onSquareClick={handleSquareClick}
           onAnimationEnd={handleAnimationEnd}
         />
@@ -671,6 +788,7 @@ const GameBoard = ({
           currentPlayer={gameState.currentPlayer}
           gameMode={gameMode}
           aiDifficulty={aiDifficulty}
+          isAIThinking={isAIThinking}
           onReset={handleReset}
           onBackToModeSelection={onBackToModeSelection}
           onModeChange={onModeChange}
@@ -708,6 +826,16 @@ const GameBoard = ({
           gameState.gameStatus === "checkmate" ||
           gameState.gameStatus === "stalemate"
         }
+      />
+
+      {/* Error Modal */}
+      <ErrorModal
+        isVisible={!!currentError}
+        error={currentError}
+        onRetry={handleErrorRetry}
+        onSwitchToPvP={handleSwitchToPvP}
+        onDismiss={handleErrorDismiss}
+        onClose={handleErrorDismiss}
       />
     </div>
   );

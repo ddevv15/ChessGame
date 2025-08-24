@@ -16,6 +16,9 @@ import styles from "./Square.module.css";
  * @param {number} props.row - Row index of this square (0-7)
  * @param {number} props.col - Column index of this square (0-7)
  * @param {Function} props.onClick - Click handler function
+ * @param {string} props.gameMode - Current game mode ('pvp' | 'ai')
+ * @param {boolean} props.isAIThinking - Whether AI is currently thinking
+ * @param {string} props.currentPlayer - Current player color
  * @returns {JSX.Element} Square component
  */
 const Square = ({
@@ -31,6 +34,9 @@ const Square = ({
   row,
   col,
   onClick,
+  gameMode = "pvp",
+  isAIThinking = false,
+  currentPlayer = "white",
 }) => {
   // Build CSS classes based on square state
   const squareClasses = [
@@ -41,6 +47,11 @@ const Square = ({
     isInCheck && styles.inCheck,
     isInvalidMove && styles.invalidMove,
     isFocused && styles.focused,
+    gameMode === "ai" && styles.aiMode,
+    gameMode === "pvp" && styles.pvpMode,
+    isAIThinking && styles.aiThinking,
+    gameMode === "ai" && currentPlayer === "black" && styles.aiTurn,
+    gameMode === "ai" && currentPlayer === "white" && styles.humanTurn,
   ]
     .filter(Boolean)
     .join(" ");

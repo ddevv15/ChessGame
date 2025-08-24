@@ -1,0 +1,245 @@
+/* ErrorModal component styles */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease-out;
+}
+
+.modal.critical {
+  border-left: 4px solid #dc3545;
+}
+
+.modal.recoverable {
+  border-left: 4px solid #ffc107;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #212529;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.closeButton:hover {
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+.closeButton:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+.content {
+  padding: 20px 24px 24px;
+}
+
+.message {
+  margin: 0 0 24px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 100px;
+  justify-content: center;
+}
+
+.button:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+.retryButton {
+  background-color: #007bff;
+  color: white;
+}
+
+.retryButton:hover {
+  background-color: #0056b3;
+}
+
+.switchButton {
+  background-color: #28a745;
+  color: white;
+}
+
+.switchButton:hover {
+  background-color: #1e7e34;
+}
+
+.continueButton {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.continueButton:hover {
+  background-color: #117a8b;
+}
+
+.dismissButton {
+  background-color: #6c757d;
+  color: white;
+}
+
+.dismissButton:hover {
+  background-color: #545b62;
+}
+
+.debugInfo {
+  margin-top: 16px;
+  padding: 16px 24px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+
+.debugInfo summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: #6c757d;
+  margin-bottom: 8px;
+}
+
+.debugText {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 0.8rem;
+  color: #495057;
+  overflow-x: auto;
+  margin: 0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .modal {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .header {
+    padding: 16px 20px 12px;
+  }
+  
+  .content {
+    padding: 16px 20px 20px;
+  }
+  
+  .title {
+    font-size: 1.1rem;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .button {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .modal {
+    border: 2px solid #000;
+  }
+  
+  .button {
+    border: 1px solid #000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .modal,
+  .button,
+  .closeButton {
+    animation: none;
+    transition: none;
+  }
+}

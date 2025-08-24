@@ -212,6 +212,189 @@
   }
 }
 
+/* Mode-specific styling */
+.pvpModeContainer {
+  position: relative;
+}
+
+.pvpModeContainer::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+  border-radius: 12px;
+  z-index: -1;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.aiModeContainer {
+  position: relative;
+}
+
+.aiModeContainer::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 87, 34, 0.1) 100%);
+  border-radius: 12px;
+  z-index: -1;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.aiModeContainer.aiThinking::before {
+  opacity: 1;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.15) 0%, rgba(255, 87, 34, 0.15) 100%);
+  animation: aiGlow 2s ease-in-out infinite;
+}
+
+/* PvP Mode Board Styling */
+.pvpMode {
+  position: relative;
+  border-color: rgba(102, 126, 234, 0.3);
+  box-shadow: 0 0 15px rgba(102, 126, 234, 0.08);
+  transition: all 0.3s ease;
+}
+
+.pvpMode.playerTurn {
+  border-color: rgba(118, 75, 162, 0.4);
+  box-shadow: 0 0 20px rgba(118, 75, 162, 0.12);
+}
+
+/* AI Mode Board Styling */
+.aiMode {
+  position: relative;
+  border-color: rgba(255, 152, 0, 0.3);
+  box-shadow: 0 0 20px rgba(255, 152, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.aiThinking {
+  animation: aiThinkingPulse 2s ease-in-out infinite;
+  border-color: rgba(255, 87, 34, 0.5);
+  box-shadow: 0 0 30px rgba(255, 87, 34, 0.2);
+}
+
+.aiTurn {
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.05) 0%, rgba(255, 87, 34, 0.05) 100%);
+  border-color: rgba(255, 87, 34, 0.4);
+  box-shadow: 0 0 25px rgba(255, 87, 34, 0.15);
+}
+
+.humanTurn {
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.03) 0%, rgba(41, 128, 185, 0.03) 100%);
+  border-color: rgba(52, 152, 219, 0.3);
+  box-shadow: 0 0 20px rgba(52, 152, 219, 0.1);
+}
+
+/* Mode Indicator */
+.modeIndicator {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 2px solid rgba(255, 152, 0, 0.3);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.modeIcon {
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.modeIcon.thinking {
+  animation: iconBounce 1s ease-in-out infinite;
+}
+
+.aiThinkingOverlay {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.2) 0%, rgba(255, 87, 34, 0.2) 100%);
+  z-index: -1;
+}
+
+.thinkingPulse {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 87, 34, 0.1) 100%);
+  animation: pulsing 2s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes aiGlow {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.005);
+  }
+}
+
+@keyframes aiThinkingPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 152, 0, 0.1);
+    border-color: rgba(255, 152, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 87, 34, 0.3);
+    border-color: rgba(255, 87, 34, 0.5);
+  }
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-2px) scale(1.1);
+  }
+}
+
+@keyframes pulsing {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+/* Enhanced AI move animations */
+.aiMode .square {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.aiThinking .square {
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Dark mode support (if implemented later) */
 @media (prefers-color-scheme: dark) {
   .chessBoardContainer {
@@ -226,5 +409,35 @@
   .rankLabel,
   .fileLabel {
     color: #cccccc;
+  }
+
+  .modeIndicator {
+    background: linear-gradient(135deg, #3d3d3d 0%, #4a4a4a 100%);
+    border-color: rgba(255, 152, 0, 0.4);
+  }
+
+  .aiModeContainer::before {
+    background: linear-gradient(135deg, rgba(255, 152, 0, 0.15) 0%, rgba(255, 87, 34, 0.15) 100%);
+  }
+}
+
+/* Reduced motion support for mode animations */
+@media (prefers-reduced-motion: reduce) {
+  .aiThinking {
+    animation: none;
+  }
+  
+  .modeIcon.thinking {
+    animation: none;
+  }
+  
+  .thinkingPulse {
+    animation: none;
+    opacity: 0.3;
+  }
+  
+  .aiMode .square,
+  .aiThinking .square {
+    transition: none;
   }
 }

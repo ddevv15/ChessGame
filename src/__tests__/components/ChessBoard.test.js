@@ -28,7 +28,10 @@ describe("ChessBoard Component", () => {
       const chessBoard = screen.getByTestId("chess-board");
       expect(chessBoard).toBeInTheDocument();
       expect(chessBoard).toHaveAttribute("role", "grid");
-      expect(chessBoard).toHaveAttribute("aria-label", "Chess board");
+      expect(chessBoard).toHaveAttribute(
+        "aria-label",
+        "Chess board - PvP mode"
+      );
 
       // Should have 64 squares (8x8)
       const squares = screen.getAllByRole("button");

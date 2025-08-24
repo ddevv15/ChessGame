@@ -31,6 +31,9 @@ const ChessBoard = ({
   animatingPieces = new Map(),
   movingPiece = null,
   focusedSquare = null,
+  gameMode = "pvp",
+  currentPlayer = "white",
+  isAIThinking = false,
   onSquareClick,
   onAnimationEnd,
   isFlipped = false,
@@ -143,6 +146,9 @@ const ChessBoard = ({
             isInvalidMove={isInvalidMoveSquare(row, col)}
             isFocused={isFocusedSquare(row, col)}
             animationData={animationData}
+            gameMode={gameMode}
+            currentPlayer={currentPlayer}
+            isAIThinking={isAIThinking}
             onAnimationEnd={onAnimationEnd}
             onClick={handleSquareClick}
           />
@@ -185,12 +191,40 @@ const ChessBoard = ({
   };
 
   // Build CSS classes for the board container
-  const boardClasses = [styles.chessBoard, isFlipped && styles.flipped]
+  const boardClasses = [
+    styles.chessBoard,
+    isFlipped && styles.flipped,
+    gameMode === "ai" && styles.aiMode,
+    gameMode === "ai" && isAIThinking && styles.aiThinking,
+    gameMode === "ai" && currentPlayer === "black" && styles.aiTurn,
+  ]
     .filter(Boolean)
     .join(" ");
 
   return (
-    <div className={styles.chessBoardContainer}>
+    <div
+      className={`${styles.chessBoardContainer} ${
+        gameMode === "ai" ? styles.aiModeContainer : styles.pvpModeContainer
+      }`}
+    >
+      {/* Mode indicator overlay */}
+      {gameMode === "ai" && (
+        <div className={styles.modeIndicator}>
+          <div
+            className={`${styles.modeIcon} ${
+              isAIThinking ? styles.thinking : ""
+            }`}
+          >
+            {currentPlayer === "black" && gameMode === "ai" ? "🤖" : "👤"}
+          </div>
+          {isAIThinking && (
+            <div className={styles.aiThinkingOverlay}>
+              <div className={styles.thinkingPulse}></div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Rank labels (left side) */}
       <div className={styles.rankLabels}>{renderRankLabels()}</div>
 
@@ -199,8 +233,11 @@ const ChessBoard = ({
         <div
           className={boardClasses}
           role="grid"
-          aria-label="Chess board"
+          aria-label={`Chess board - ${gameMode === "ai" ? "AI" : "PvP"} mode`}
           data-testid="chess-board"
+          data-game-mode={gameMode}
+          data-current-player={currentPlayer}
+          data-ai-thinking={isAIThinking}
         >
           {renderSquares()}
         </div>
